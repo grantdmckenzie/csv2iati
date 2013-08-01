@@ -1,0 +1,19 @@
+<?php
+
+$iati_fields = array('description', 'title');
+
+class description {
+  public $value;
+  function description($val) {
+    $this->value = $val;
+  }
+}
+
+class title {
+  public $value;
+  function title($val) {
+    $this->value = $val;
+  }
+}
+
+?>

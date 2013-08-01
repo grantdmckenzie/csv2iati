@@ -1,0 +1,42 @@
+.sub1 {
+  margin-left: 10px;
+  font: verdana;
+}
+.sub2 {
+  margin-left: 20px;
+  font: verdana;
+}
+.sub3 {
+  margin-left: 30px;
+  font: verdana;
+}
+.sub4 {
+  margin-left: 40px;
+  font: verdana;
+}
+.sub5 {
+  margin-left: 50px;
+  font: verdana;
+}
+.close {
+    float: right;
+    margin: 10px;
+}
+.field {
+    margin: 10px;
+    border: solid 2px #999999;
+    padding: 10px;
+    font-size: 14px;
+}
+#frontform {
+    margin: 20px;
+}
+.label {
+    float: left;
+    width: 200px;
+    clear: both;
+}
+.entry {
+    float: left;
+    
+}

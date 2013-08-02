@@ -3,6 +3,12 @@
   <title>CSV to IATI Converter</title>
   <link href="css/main.css" rel="stylesheet" type="text/css">
 <?php
+  session_start();
+  if (!session_is_registered('wbuser')) {
+    header("location: login.php");
+  } 
+  require "inc/user.inc";
+  $wbuser = unserialize($_SESSION['wbuser']);
   error_reporting(E_ALL);
   ini_set('display_errors', 1);
 
@@ -57,16 +63,16 @@
     <body>
      <div id="frontform">
       <form action="index.php" method="post" enctype="multipart/form-data">
-	<div class="label">Organization Name:</div><div class="entry"><input type="text" name="orgname"/></div>
-	<div class="label">Organization Reference:</div><div class="entry"><input type="text" name="orgref"/></div>
-	<div class="label">Organization Type:</div><div class="entry"><input type="text" name="orgtype"/></div>
+	<div class="label">Organization Name:</div><div class="entry"><input type="text" name="orgname" value="<?php echo $wbuser->org; ?>" /></div>
+	<div class="label">Organization Reference:</div><div class="entry"><input type="text" name="orgref" value="<?php echo $wbuser->ref; ?>" /></div>
+	<div class="label">Organization Type:</div><div class="entry"><input type="text" name="orgtype" value="<?php echo $wbuser->orgtype; ?>" /></div>
 
 	<div class="label">Currency:</div><div class="entry"><input type="text" name="orgcurrency"/></div>
 	<div class="label">Language:</div><div class="entry"><input type="text" name="orglanguage"/></div>
 	
-	<div class="label">Contact Person:</div><div class="entry"><input type="text" name="orgcontact"/></div>
+	<div class="label">Contact Person:</div><div class="entry"><input type="text" name="orgcontact" value="<?php echo $wbuser->first . " " . $wbuser->last; ?>" /></div>
 	<div class="label">Contact Telephone:</div><div class="entry"><input type="text" name="orgphone"/></div>
-	<div class="label">Email Address:</div><div class="entry"><input type="text" name="orgemail"/></div>
+	<div class="label">Email Address:</div><div class="entry"><input type="text" name="orgemail" value="<?php echo $wbuser->email; ?>" /></div>
 	<div class="label">Address:</div><div class="entry"><input type="text" name="orgaddress"/></div>
 
 	<div class="label">CSV File:</div><div class="entry">

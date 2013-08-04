@@ -1,42 +1,98 @@
+body {
+    font-family: verdana;
+    font-size: 12px;
+    color: #333333;
+    margin: 0
+}
+
 .sub1 {
   margin-left: 10px;
-  font: verdana;
 }
 .sub2 {
   margin-left: 20px;
-  font: verdana;
 }
 .sub3 {
   margin-left: 30px;
-  font: verdana;
 }
 .sub4 {
   margin-left: 40px;
-  font: verdana;
 }
 .sub5 {
   margin-left: 50px;
-  font: verdana;
 }
 .close {
     float: right;
-    margin: 10px;
+    position: relative;
+    top: -30px;
 }
 .field {
     margin: 10px;
-    border: solid 2px #999999;
+    border: solid 1px #646464;
     padding: 10px;
-    font-size: 14px;
+    display: none;
 }
 #frontform {
     margin: 20px;
+    position: relative;
 }
 .label {
     float: left;
-    width: 200px;
-    clear: both;
+    width: 150px;
+    text-align: right;
+    padding-right: 10px;	
 }
 .entry {
     float: left;
-    
+}
+.firstGroups {
+    border: solid 1px #646464;
+    float: left;
+    clear: both;
+    padding: 10px;
+    margin: 10px;
+    position: relative;
+    width: 420px;
+}
+#wrapperNext {
+    float: left;
+    clear: both;
+    margin: 10px;
+}
+h2 {
+    margin:10px;
+    color: #ffffff;
+    float: left;
+}
+h3 {
+    margin: 0;
+    padding: 0;
+}
+#workspace {
+    float: left;
+    clear: both;
+    width: 600px;
+}
+#exportIATI {
+    display: none;
+}
+
+#header {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    padding: 10px;
+    height: 40px;
+    background-color: #646464;
+}
+#menu {
+    float: right;
+    margin: 13px 30px;
+    color: #ffffff;
+}
+a:link, a:visited {
+   color: #ffffff;  
+}
+a:hover {
+    color: #99ff99;
 }

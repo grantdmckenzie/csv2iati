@@ -39,8 +39,13 @@
   <script src="js/json.js"></script>
 <?php
     if ($_FILES["file"]["error"] > 0) {
-	echo "Error uploading file: " . $_FILES["file"]["error"] . "<br>";
+	// echo "Error uploading file: " . $_FILES["file"]["error"] . "<br>";
+	header("location: index.php?e=".$_FILES["file"]["error"]);
     } else {
+      
+	if (strlen($_POST['orgname']) < 2)
+	  header("location: index.php?e=1");
+	  
 	// Parse the CSV to get column headers (to load select)
 	parseCSV($_FILES["file"]["tmp_name"]);
 	// Move CSV to known directory for access later.  CSV labeled by date and a random integer.
@@ -48,6 +53,7 @@
 	move_uploaded_file($_FILES["file"]["tmp_name"], $filepath);
 	// Serialize the POST params to send it to the export.php page
 	$a = serialize($_POST);
+	
 ?>
   <script src="js/main.js"></script>
  </head>
@@ -64,13 +70,13 @@
     <select id="iati_fields"><option value="">Add new IATI field</select>
     </div>
     <div id="workspace"></div>
-    <div class="firstGroups" style="border:0">
-    <button onclick="saveMapping();" id="saveModel" style="float:left">Save Model</button>
+    <div class="firstGroups" style="border:0;background-color:#ffffff;">
+    <div class="bigbutton" onclick="saveMapping();" id="saveModel" style="float:left" title="Save Model">Save Model</div>
     <form action='export.php' method='post' target='_blank'>
       <input type='hidden' value='' name='map' id='map'/>
       <input type='hidden' value='<?php echo $a; ?>' name='serializeorg'/>
       <input type='hidden' value='<?php echo $filepath; ?>' name='filename'/>
-      <input type='submit' value='Export as IATI' id="exportIATI" />
+      <input class="bigbutton" type='submit' value='Export as IATI' id="exportIATI" />
     </form>
     </div>
   </div>
@@ -87,6 +93,7 @@
       <div class="firstGroups" style="border:0">
 	Instructions here
       </div>
+      <?php if(isset($_GET['e'])) echo "<div class='error'>".errorCode($_GET['e'])."</div>"; ?>
       <form action="index.php" method="post" enctype="multipart/form-data">
        <div class="firstGroups">
 	<div class="label">Organization Name:</div><div class="entry"><input type="text" name="orgname" value="<?php echo $wbuser->org; ?>" /></div>
@@ -111,7 +118,7 @@
        </div>
 	<div id="wrapperNext">
 	<br/>
-	<input type="submit" name="submit" value="Next Step >"/>
+	<input class="bigbutton" type="submit" name="submit" value="Next Step >"/>
 	</div>
       </form>
      </div><div class="entry">
@@ -124,14 +131,24 @@
     require_once('inc/parsecsv.inc');
     $csv = new parseCSV();
     $csv->auto($file);
-    echo "<script language='javascript'>\nvar csvcolumns = new Array('None','Manual Entry',";
+    echo "\t<script language='javascript'>\n\ttvar csvcolumns = new Array('None','Manual Entry',";
     for($i=0;$i<count($csv->titles);$i++) {
       echo "'".$csv->titles[$i]."'";
       if ($i<count($csv->titles)-1) {
 	echo ",";
       }
     }
-    echo ");\n</script>";
+    echo ");\n\t</script>\n";
+  }
+  
+  function errorCode($error) {
+    if ($error == 4) {
+      return "Please supply a comma delimited (CSV) file for upload;";
+    } else if ($error == 1) {
+      return "Please provide an Organization Name.";
+    } else {
+      return "";
+    }
   }
  
 

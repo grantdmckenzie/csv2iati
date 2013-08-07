@@ -23,13 +23,23 @@ body {
 .close {
     float: right;
     position: relative;
-    top: -30px;
+    top: -23px;
+    border: solid 1px #333333;
+    padding: 0px 3px 2px 3px;
+    border-radius: 3px;
+    background-color: #eeeeee;
+}
+.close:hover {
+    background-color:#ee9999;
+    color:#ffffff;
 }
 .field {
     margin: 10px;
-    border: solid 1px #646464;
+    border: solid 1px #999999;
     padding: 10px;
     display: none;
+    border-radius: 5px;
+    -border-radius: 5px;
 }
 #frontform {
     margin: 20px;
@@ -51,7 +61,11 @@ body {
     padding: 10px;
     margin: 10px;
     position: relative;
+    background-color: #eeeeee;
     width: 420px;
+    border-radius: 5px;
+    -border-radius: 5px;
+    -webkit-border-radius: 5px;
 }
 #wrapperNext {
     float: left;
@@ -64,7 +78,7 @@ h2 {
     float: left;
 }
 h3 {
-    margin: 0;
+    margin: 0 0 5px 0;
     padding: 0;
 }
 #workspace {
@@ -95,4 +109,25 @@ a:link, a:visited {
 }
 a:hover {
     color: #99ff99;
+}
+.error {
+    color: #ff0000;
+    float:left;
+    clear: both;
+    margin-left: 15px;
+}
+.bigbutton {
+    background-color: #646464;
+    border: solid 3px #333333;
+    border-radius: 5px;
+    padding: 5px 15px;
+    font-family: verdana;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #ffffff;
+}
+.bigbutton:hover {
+    background-color: #777777;
+    border-color: #666666;
 }

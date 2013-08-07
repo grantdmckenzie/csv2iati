@@ -13,10 +13,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link href="css/main.css" rel="stylesheet" type="text/css">
 <?php
-  /* session_start();
+  session_start();
   if (!session_is_registered('wbuser')) {
     header("location: login.php");
-  } */
+  }
   
   // Load user object from session
   require "inc/user.inc";
@@ -131,7 +131,7 @@
     require_once('inc/parsecsv.inc');
     $csv = new parseCSV();
     $csv->auto($file);
-    echo "\t<script language='javascript'>\n\ttvar csvcolumns = new Array('None','Manual Entry',";
+    echo "\t<script language='javascript'>\n\tvar csvcolumns = new Array('None','Manual Entry',";
     for($i=0;$i<count($csv->titles);$i++) {
       echo "'".$csv->titles[$i]."'";
       if ($i<count($csv->titles)-1) {

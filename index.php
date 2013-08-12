@@ -62,6 +62,9 @@
     <?php include_once('inc/header.inc'); ?>
     <div id="frontform">
     <div class="firstGroups">
+      Model Name: <input type="text" id="modelname"/>
+    </div>
+    <div class="firstGroups">
       Organization Name: <?php echo $org->orgname; ?><br/>
       Organization Reference: <?php echo $org->orgref; ?>
     </div>
@@ -74,8 +77,8 @@
     <div class="bigbutton" onclick="saveMapping();" id="saveModel" style="float:left" title="Save Model">Save Model</div>
     <form action='export.php' method='post' target='_blank'>
       <input type='hidden' value='' name='map' id='map'/>
-      <input type='hidden' value='<?php echo $a; ?>' name='serializeorg'/>
-      <input type='hidden' value='<?php echo $filepath; ?>' name='filename'/>
+      <input type='hidden' value='<?php echo $a; ?>' name='serializeorg' id="serializeorg"/>
+      <input type='hidden' value='<?php echo $filepath; ?>' name='filename' id='filename'/>
       <input class="bigbutton" type='submit' value='Export as IATI' id="exportIATI" />
     </form>
     </div>

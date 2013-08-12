@@ -14,7 +14,7 @@
     Welcome <?php echo $wbuser->first; ?> | 
     <a href="user.php">User Profile</a> | 
     <a href="index.php">New Model</a> | 
-    <a href="index.php">Saved Models</a> | 
+    <a href="models.php">Saved Models</a> | 
     <a href="logout.php">Logout</a>
   </div>
   

@@ -135,96 +135,122 @@ $(document).ready(function() {
   
   
   function saveMapping() {
-    _mapping = {};
-    var matrix = new Array();
-    var matchval = new Array();
-    $("select").each(function(index, domEle) {
-	
-	if (domEle.id != "iati_fields") {
-	  var e = domEle.id.split("_");
-	  if (domEle.value == "Manual Entry") {
-	    var x = domEle.id.split(".");
-	    var y = x[0]+"\\."+x[1];
-	    matchval.push($('#'+y+'_txt').val());
-	  } else {	    
-	    matchval.push(domEle.value);
-	  }
-	  matrix.push(e);
-	}
-    });
+    if ($('#modelname').val().length > 0) {
+	_mapping = {};
+	var matrix = new Array();
+	var matchval = new Array();
+	$("select").each(function(index, domEle) {
+	    
+	    if (domEle.id != "iati_fields") {
+	      var e = domEle.id.split("_");
+	      if (domEle.value == "Manual Entry") {
+		var x = domEle.id.split(".");
+		var y = x[0]+"\\."+x[1];
+		matchval.push($('#'+y+'_txt').val());
+	      } else {	    
+		matchval.push(domEle.value);
+	      }
+	      matrix.push(e);
+	    }
+	});
 
-    for(var j=0;j<matrix.length;j++) {
-      var match = false;
-      for(var i=0;i<_mapping.length;i++) {
-	if(temp[i] == matrix[j][0])
-	   var match = true
-      }
-      if (!match) {
-	_mapping[matrix[j][0]] = {};
-      }
-    }
-    for(var i=0;i<matrix.length;i++) {
-      if(matrix[i].length == 2) {
-	_mapping[matrix[i][0]][matrix[i][1]] = matchval[i];
-      }
-    }
-    for(var i=0;i<matrix.length;i++) {
-      if(matrix[i].length == 3) {
-	if(!_mapping[matrix[i][0]])
-	  _mapping[matrix[i][0]] = {};
-	if(!_mapping[matrix[i][0]][matrix[i][1]])
-	  _mapping[matrix[i][0]][matrix[i][1]] = {};
-	_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]] = matchval[i];
-      }
-    }
-    for(var i=0;i<matrix.length;i++) {
-      if(matrix[i].length == 4) {
-	if(!_mapping[matrix[i][0]])
-	  _mapping[matrix[i][0]] = {};
-	if(!_mapping[matrix[i][0]][matrix[i][1]])
-	  _mapping[matrix[i][0]][matrix[i][1]] = {};
-	if(!_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]])
-	  _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]] = {};
-	_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]] = matchval[i];
-      }
-    }
-    for(var i=0;i<matrix.length;i++) {
-      if(matrix[i].length == 5) {
-	if(!_mapping[matrix[i][0]])
-	  _mapping[matrix[i][0]] = {};
-	if(!_mapping[matrix[i][0]][matrix[i][1]])
-	  _mapping[matrix[i][0]][matrix[i][1]] = {};
-	if(!_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]])
-	  _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]] = {};
-	if(!_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]])
-	  _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]] = {};
-	_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]][matrix[i][4]] = matchval[i];
-      }
-    }
-    for(var i=0;i<matrix.length;i++) {
-      if(matrix[i].length == 6) {
-	if(!_mapping[matrix[i][0]])
-	  _mapping[matrix[i][0]] = {};
-	if(!_mapping[matrix[i][0]][matrix[i][1]])
-	  _mapping[matrix[i][0]][matrix[i][1]] = {};
-	if(!_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]])
-	  _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]] = {};
-	if(!_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]])
-	  _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]] = {};
-	if(!_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]][matrix[i][4]])
-	  _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]][matrix[i][4]] = {};
-	_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]][matrix[i][4]][matrix[i][5]] = matchval[i];
-      }
-    }
-    var ser = escape(JSON.stringify(_mapping, null, 2));
-    $('#map').val(ser);
-    if (ser.length > 6) {
-      $('#saveModel').fadeOut(function() {
-	$('#exportIATI').fadeIn();
-      });
-      
+	for(var j=0;j<matrix.length;j++) {
+	  var match = false;
+	  for(var i=0;i<_mapping.length;i++) {
+	    if(temp[i] == matrix[j][0])
+	      var match = true
+	  }
+	  if (!match) {
+	    _mapping[matrix[j][0]] = {};
+	  }
+	}
+	for(var i=0;i<matrix.length;i++) {
+	  if(matrix[i].length == 2) {
+	    _mapping[matrix[i][0]][matrix[i][1]] = matchval[i];
+	  }
+	}
+	for(var i=0;i<matrix.length;i++) {
+	  if(matrix[i].length == 3) {
+	    if(!_mapping[matrix[i][0]])
+	      _mapping[matrix[i][0]] = {};
+	    if(!_mapping[matrix[i][0]][matrix[i][1]])
+	      _mapping[matrix[i][0]][matrix[i][1]] = {};
+	    _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]] = matchval[i];
+	  }
+	}
+	for(var i=0;i<matrix.length;i++) {
+	  if(matrix[i].length == 4) {
+	    if(!_mapping[matrix[i][0]])
+	      _mapping[matrix[i][0]] = {};
+	    if(!_mapping[matrix[i][0]][matrix[i][1]])
+	      _mapping[matrix[i][0]][matrix[i][1]] = {};
+	    if(!_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]])
+	      _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]] = {};
+	    _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]] = matchval[i];
+	  }
+	}
+	for(var i=0;i<matrix.length;i++) {
+	  if(matrix[i].length == 5) {
+	    if(!_mapping[matrix[i][0]])
+	      _mapping[matrix[i][0]] = {};
+	    if(!_mapping[matrix[i][0]][matrix[i][1]])
+	      _mapping[matrix[i][0]][matrix[i][1]] = {};
+	    if(!_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]])
+	      _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]] = {};
+	    if(!_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]])
+	      _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]] = {};
+	    _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]][matrix[i][4]] = matchval[i];
+	  }
+	}
+	for(var i=0;i<matrix.length;i++) {
+	  if(matrix[i].length == 6) {
+	    if(!_mapping[matrix[i][0]])
+	      _mapping[matrix[i][0]] = {};
+	    if(!_mapping[matrix[i][0]][matrix[i][1]])
+	      _mapping[matrix[i][0]][matrix[i][1]] = {};
+	    if(!_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]])
+	      _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]] = {};
+	    if(!_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]])
+	      _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]] = {};
+	    if(!_mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]][matrix[i][4]])
+	      _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]][matrix[i][4]] = {};
+	    _mapping[matrix[i][0]][matrix[i][1]][matrix[i][2]][matrix[i][3]][matrix[i][4]][matrix[i][5]] = matchval[i];
+	  }
+	}
+	var ser = escape(JSON.stringify(_mapping, null, 2));
+	$('#map').val(ser);
+	if (ser.length > 6) {
+	  updateDB(ser);
+	} else {
+	  alert("Please add at least one IATI element before saving the model");
+	}
     } else {
-      alert("Please add at least one IATI element before saving the model");
+	alert("Please provide a name for your new model.");
     }
   }
+  
+  function updateDB(map) {
+    var data = {}
+    data.filename = $('#filename').val();
+    data.map = map;
+    data.modelname = $('#modelname').val();
+    data.orgdata = $('#serializeorg').val();
+    
+    $.ajax({
+      type: "POST",
+      url: 'savemodel.php',
+      data: data,
+      success: function(data) {
+	if (data == "TRUE\n") {
+	  $('#saveModel').fadeOut(function() {
+	    $('#exportIATI').fadeIn();
+	  });
+	} else {
+	    alert(data);
+	}
+      },
+      dataType: 'text'
+    });
+  }
+  
   

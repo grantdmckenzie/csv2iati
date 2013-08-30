@@ -1,5 +1,6 @@
 var _count = 0;
-
+var _saveNumber = 0;
+var _previousName = "";
 $(document).ready(function() {
   
   $.each( iati_template, function( key, value ) {
@@ -13,6 +14,9 @@ $(document).ready(function() {
       var field = $("select option:selected").val();
       fieldLookUp(field);
       swapButtons();
+  });
+  $('#modelname').change(function() {
+    swapButtons();
   });
   
 });
@@ -136,6 +140,7 @@ $(document).ready(function() {
   
   function saveMapping() {
     if ($('#modelname').val().length > 0) {
+	_saveNumber ++;;
 	_mapping = {};
 	var matrix = new Array();
 	var matchval = new Array();
@@ -235,6 +240,7 @@ $(document).ready(function() {
     data.map = map;
     data.modelname = $('#modelname').val();
     data.orgdata = $('#serializeorg').val();
+    data.previousname = _previousName;
     
     $.ajax({
       type: "POST",
@@ -244,6 +250,7 @@ $(document).ready(function() {
 	if (data == "TRUE\n") {
 	  $('#saveModel').fadeOut(function() {
 	    $('#exportIATI').fadeIn();
+	    _previousName = $('#modelname').val();
 	  });
 	} else {
 	    alert(data);

@@ -33,9 +33,9 @@
     $xml = new SimpleXMLElement('<iati-activities/>');
     $xml->addAttribute('generated-datetime', $d);
     $xml->addAttribute('version', '1.0');
-    
+
     foreach($csv->data as $key=>$row) {
-    
+
 	// Activity is a required subchild of the Activities element.  There is one activity for each row in the CSV file
 	$activity = $xml->addChild('iati-activity');
 	$activity->addAttribute('default-currency',$org['orgcurrency']);
@@ -50,7 +50,7 @@
 	mapFields($key, $row);
     }
 
-    Header('Content-type: text/xml; charset=ISO-8859-2');
+    Header('Content-type: text/xml; charset=utf-8');
     print($xml->asXML());
 
    } else {
@@ -131,10 +131,12 @@
   // Check that the array properties exist before adding a new element.
   function checkManualEntry($parent,$row,$val,$key) {
     if(strlen($val) > 0) {
-      if(array_key_exists($val, $row))
-	$prop = $parent->addChild($key, utf8_decode(htmlspecialchars($row[$val])));
-      else
-	$prop = $parent->addChild($key, utf8_decode(htmlspecialchars($val)));
+      if(array_key_exists($val, $row)) {
+	// echo check_utf8($row[$val]) . "\t". $row[$val] . "\n";
+	$prop = $parent->addChild($key, utf8_encode(htmlspecialchars($row[$val])));
+      } else {
+	$prop = $parent->addChild($key, utf8_encode(htmlspecialchars($val)));
+      }
     return $prop;
     }
   }
@@ -143,10 +145,32 @@
   function checkManualEntryAtt($row,$propval,$prop, $propkey) {
     if(strlen($propval) > 0) {
       if(array_key_exists($propval, $row))
-	$prop->addAttribute($propkey, utf8_decode(htmlspecialchars($row[$propval])));
+	$prop->addAttribute($propkey, utf8_encode(htmlspecialchars($row[$propval])));
       else
-	$prop->addAttribute($propkey, utf8_decode(htmlspecialchars($propval)));
+	$prop->addAttribute($propkey, utf8_encode(htmlspecialchars($propval)));
       return $prop;
     }
   }
+  
+  function check_utf8($str) { 
+    $len = strlen($str); 
+    for($i = 0; $i < $len; $i++){ 
+        $c = ord($str[$i]); 
+        if ($c > 128) { 
+            if (($c > 247)) return false; 
+            elseif ($c > 239) $bytes = 4; 
+            elseif ($c > 223) $bytes = 3; 
+            elseif ($c > 191) $bytes = 2; 
+            else return false; 
+            if (($i + $bytes) > $len) return false; 
+            while ($bytes > 1) { 
+                $i++; 
+                $b = ord($str[$i]); 
+                if ($b < 128 || $b > 191) return false; 
+                $bytes--; 
+            } 
+        } 
+    } 
+    return true; 
+  } // end of check_utf8
 ?>

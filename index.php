@@ -12,6 +12,8 @@
   <title>CSV to IATI Conversion Tool</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link href="css/main.css" rel="stylesheet" type="text/css">
+  <script src="js/jquery.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <?php
   session_start();
   if (!session_is_registered('wbuser')) {
@@ -38,7 +40,7 @@
     $org = new org($_POST);
 ?>
 
-  <script src="js/jquery.min.js"></script>
+  
   <script src="js/iati_template.js"></script>
   <script src="js/json.js"></script>
 <?php
@@ -93,7 +95,8 @@
   } else {
     // If the is not a postback, load the following content:
 ?>
-
+  <script src="js/loadiati.js"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
   </head>
     <body>
     <?php include_once('inc/header.inc'); ?>
@@ -105,9 +108,9 @@
       <?php if(isset($_GET['e'])) echo "<div class='error'>".errorCode($_GET['e'])."</div>"; ?>
       <form action="index.php" method="post" enctype="multipart/form-data">
        <div class="firstGroups">
-	<div class="label">Organization Name:</div><div class="entry"><input type="text" name="orgname" value="<?php echo urldecode($wbuser->org); ?>" /></div>
-	<div class="label">Organization Reference:</div><div class="entry"><input type="text" name="orgref" value="<?php echo urldecode($wbuser->ref); ?>" /></div>
-	<div class="label">Organization Type:</div><div class="entry"><input type="text" name="orgtype" value="<?php echo urldecode($wbuser->orgtype); ?>" /></div>
+	<div class="label">Organization Name:</div><div class="entry"><input type="text" id="orgname" name="orgname" value="<?php echo urldecode($wbuser->org); ?>" /></div>
+	<div class="label">Organization Reference:</div><div class="entry"><input type="text" id="orgref" name="orgref" value="<?php echo urldecode($wbuser->ref); ?>" /></div>
+	<div class="label">Organization Type:</div><div class="entry"><input type="text" style="width:307px" id="orgtypenames"/><input style="width:20px" type="text" id="orgtype" name="orgtype" value="<?php echo urldecode($wbuser->orgtype); ?>" /></div>
        </div>
        <div class="firstGroups">
 	<div class="label">Currency:</div><div class="entry"><select name="orgcurrency"><?php printCurrency($wbuser->currency, $currency); ?></select></div><br/><br/>

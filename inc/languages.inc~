@@ -1,0 +1,6 @@
+<?php
+
+  $currency = array(1); //'USD'->'U.S. Dollars','CND'=>'Canadian Dollars','AUD'=>'Australian Dollars');
+  $language = array(2); //'en'=>'English','es'=>'Spanish','fr'=>'French');
+
+?>

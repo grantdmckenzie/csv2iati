@@ -267,3 +267,4 @@ $(document).ready(function() {
     return !isNaN(parseFloat(n)) && isFinite(n);
   }
   
+  

@@ -13,7 +13,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link href="css/main.css" rel="stylesheet" type="text/css">
   <script src="js/jquery.min.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <script src="js/jquery.ui.js"></script>
 <?php
   session_start();
   if (!session_is_registered('wbuser')) {
@@ -96,7 +96,7 @@
     // If the is not a postback, load the following content:
 ?>
   <script src="js/loadiati.js"></script>
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <link rel="stylesheet" href="css/jquery.css" />
   </head>
     <body>
     <?php include_once('inc/header.inc'); ?>

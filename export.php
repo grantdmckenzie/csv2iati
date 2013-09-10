@@ -11,47 +11,61 @@
 	    - Serialized PHP Organization object (includes Org name, reference, etc)
 	    - Path to CSV file uploaded to the server (on the previous index.php page)
   */
+  session_start();
+  if (!session_is_registered('wbuser')) {
+    header("location: login.php");
+  }
   
   error_reporting(E_ALL);
   ini_set('display_errors', 1);
   
-  if (isset($_POST['map'])) {
-    // JSON object for the csv2iati mapping is passed as a string
+  if (isset($_GET['id'])) {
+    $id = pg_escape_string($_GET['id']);
     require_once('inc/class.inc');
+    require "inc/user.inc";
+    $wbuser = unserialize($_SESSION['wbuser']);
+    
     date_default_timezone_set('UTC');
     $d = date("Y-m-d\TH:i:s");
-    // Deserialize the organization information that was posted here.
-    $org = unserialize($_POST['serializeorg']);
- 
-    // turn the JSON Mapping Object into a PHP Array
-    $map = json_decode(urldecode($_POST['map']));
+    $data = fromDB($id, $wbuser->id);
+    
 
     // Get the CSV filename, open it and parse it in to a CSV object.
-    $csv = parseCSV($_POST['filename']);
+    $csv = parseCSV($data['filename']);
     
     // Construct the base XML element and add required attributes
-    $xml = new SimpleXMLElement('<iati-activities/>');
+    $xml = simplexml_load_string('<iati-activities></iati-activities>');
+    
+    // $xml = new SimpleXMLElement('<iati-activities/>');
+    
+    // $xml->addAttribute('encoding','UTF-8');
+    // $xml->addAttribute('version', '1.0');
     $xml->addAttribute('generated-datetime', $d);
-    $xml->addAttribute('version', '1.0');
+    
 
     foreach($csv->data as $key=>$row) {
 
 	// Activity is a required subchild of the Activities element.  There is one activity for each row in the CSV file
 	$activity = $xml->addChild('iati-activity');
-	$activity->addAttribute('default-currency',$org['orgcurrency']);
-	$activity->addAttribute('xml:lang',$org['orglanguage']);
+	$activity->addAttribute('default-currency',$data['org']['orgcurrency']);
+
+	$activity->addAttribute('xml:xml:lang',$data['org']['orglanguage']);
+	$activity->addAttribute('last-updated-datetime',$d);
+	
 	
 	// All activities require a reporting agency as well.
-	$reportingorg = $activity->addChild('reporting-org',$org['orgname']);
-	$reportingorg->addAttribute('ref',$org['orgref']);
-	$reportingorg->addAttribute('type',$org['orgtype']);
+	$reportingorg = $activity->addChild('reporting-org',$data['org']['orgname']);
+	$reportingorg->addAttribute('ref',$data['org']['orgref']);
+	$reportingorg->addAttribute('type',$data['org']['orgtype']);
 	
 	// Add the additional elements based on the CSV and provided mapping file.
 	mapFields($key, $row);
     }
 
     Header('Content-type: text/xml; charset=utf-8');
-    print($xml->asXML());
+    $outputXML = str_replace('<?xml version="1.0"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xml->asXML());
+    echo $outputXML;
+
 
    } else {
       echo "No IATI object provided.";
@@ -61,13 +75,14 @@
    function parseCSV($file) {
     require_once('inc/parsecsv.inc');
     $csv = new parseCSV();
+    
     $csv->auto($file);
     return $csv;
   }
   
   function mapFields($csvkey, $row) {
-    global $map, $activity;
-    foreach($map as $key=>$val) {
+    global $data, $activity;
+    foreach($data['map'] as $key=>$val) {
       $subkey = explode(".",$key);
       
       // Special Case for complex (nested) xml fields.  Currently these include Budget, Transation and Location.  Could potentially add Result in the future. 
@@ -104,10 +119,12 @@
       } else {
 	// Check to see if there is a "text" property
 	if (property_exists($val,"text")) {
-	
-	  // If there is one and it has been assigned a value create the element with a value
-	  if($val->text != "None")
+
+	   // If there is one and it has been assigned a value create the element with a value
+	  if($val->text != "None") {
 	    $prop = checkManualEntry($activity, $row, $val->text, $subkey[0]);
+	    
+	  }
 	} else {
 	
 	  // If there is no text value, just create an element with no assigned value
@@ -130,12 +147,16 @@
  
   // Check that the array properties exist before adding a new element.
   function checkManualEntry($parent,$row,$val,$key) {
+    global $data;
     if(strlen($val) > 0) {
       if(array_key_exists($val, $row)) {
 	// echo check_utf8($row[$val]) . "\t". $row[$val] . "\n";
-	$prop = $parent->addChild($key, utf8_encode(htmlspecialchars($row[$val])));
+	 if ($key == "iati-identifier") {
+	    $row[$val] = $data['org']['orgref'] . "-" . $row[$val];
+	  }
+	$prop = $parent->addChild($key, encodeStuff($row[$val]));
       } else {
-	$prop = $parent->addChild($key, utf8_encode(htmlspecialchars($val)));
+	$prop = $parent->addChild($key, encodeStuff($val));
       }
     return $prop;
     }
@@ -145,9 +166,9 @@
   function checkManualEntryAtt($row,$propval,$prop, $propkey) {
     if(strlen($propval) > 0) {
       if(array_key_exists($propval, $row))
-	$prop->addAttribute($propkey, utf8_encode(htmlspecialchars($row[$propval])));
+	$prop->addAttribute($propkey, encodeStuff($row[$propval]));
       else
-	$prop->addAttribute($propkey, utf8_encode(htmlspecialchars($propval)));
+	$prop->addAttribute($propkey, encodeStuff($propval));
       return $prop;
     }
   }
@@ -173,4 +194,29 @@
     } 
     return true; 
   } // end of check_utf8
+  
+  function fromDB($id, $userid){
+    require_once('inc/dbase.inc');
+    
+    $sql="SELECT * FROM models WHERE id=".$id." AND userid = ".$userid;
+
+    $result=pg_query($sql);
+    $count=pg_num_rows($result);
+    if ($count > 0) {
+      $data = array();
+      while ($row = pg_fetch_array($result)) {
+	$data['filename'] = $row['filename'];
+	$data['org'] = unserialize($row['orgdata']);
+	$data['map'] = json_decode(urldecode($row['map']));
+      }
+      return $data;
+    }
+  }
+  
+  function encodeStuff($val) {
+    // $val = html_entity_decode($val, ENT_NOQUOTES, 'UTF-8');
+    // echo $val . "<br/>";
+    $val = utf8_encode(htmlspecialchars($val));
+    return $val;
+  }
 ?>

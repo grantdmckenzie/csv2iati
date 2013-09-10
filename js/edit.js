@@ -1,10 +1,12 @@
+
 $(document).ready(function() {
   
   $.each(map, function( key, value ) {
     var k = key.split(".");
     fieldLookUpEdit(k[0], k[1]);
-    
   });
+ _previousName = escape($('#modelname').val());
+ 
  
   // setTimeout("40","updateSelects()");
   
@@ -92,19 +94,29 @@ $(document).ready(function() {
       var j = iati_field_key.split('_');
       var d = JSON.stringify(j);
       var objval = eval("map"+d.replace(/,/g,"]["));
-     
+      var match = false;
+      var txtboxmatch = false;
    
+      
+      if (jQuery.inArray(objval, csvcolumns) == -1) {
+	var txtbox = "<input type='text' id='"+iati_field_key+"_txt' value='"+objval+"' style='width:200px;' />";
+	txtboxmatch = true;
+      } else {
+	var txtbox = "<input type='text' id='"+iati_field_key+"_txt' style='display:none;width:200px;'/>";
+      }
       $.each(csvcolumns, function(key,value) {
-	  if (value == objval)
-	    select += "<option value='"+value+"' selected>"+value+"</option>";
-	  else
-	    select += "<option value='"+value+"'>"+value+"</option>";
 	  
+	  if (value == objval) {
+	    select += "<option value='"+value+"' selected>"+value+"</option>";
+	  } else if (value == 'Manual Entry') {
+	    if (txtboxmatch)
+		select += "<option value='"+value+"' selected>"+value+"</option>";
+	  } else {
+	    select += "<option value='"+value+"'>"+value+"</option>";
+	  }
       });
+	  
       select += "</select>";
-      if (jQuery.inArray(objval, csvcolumns) == -1)
-	select += "<input type='text' id='"+iati_field_key+"_txt' value='"+objval+"' />";
-      else
-	select += "<input type='text' id='"+iati_field_key+"_txt' style='display:none'/>";
+      select += txtbox;
       return select;
   }

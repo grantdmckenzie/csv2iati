@@ -20,6 +20,8 @@
   
   // Load user object from session
   require "inc/user.inc";
+  require "inc/languages.inc";
+
   $wbuser = unserialize($_SESSION['wbuser']);
   
   // Error Reporting
@@ -29,6 +31,8 @@
   // Check if this is a postback (look for the u param).
   if (isset($_POST['u']) && $_POST['u'] == 1) {
   
+    
+
     // Create an organization object from the post parameters
     require_once('inc/class.inc');
     $org = new org($_POST);
@@ -62,23 +66,24 @@
     <?php include_once('inc/header.inc'); ?>
     <div id="frontform">
     <div class="firstGroups">
-      Model Name: <input type="text" id="modelname"/>
+      <div class="label" style="width:100px">Model Name</div><input type="text" id="modelname"/>
     </div>
-    <div class="firstGroups">
+    <!-- <div class="firstGroups">
       Organization Name: <?php echo $org->orgname; ?><br/>
       Organization Reference: <?php echo $org->orgref; ?>
-    </div>
+    </div> -->
     <div class="firstGroups">
-    Select an IATI Field from the list below to view CSV mappping options:<br/>
-    <select id="iati_fields"><option value="">Add new IATI field</select>
+      <div style="font-size:15px">Select an IATI Field from the drop-down menu to view CSV mappping options<br/><br/>
+    <select id="iati_fields"><option value="">Add new IATI field</select></div>
     </div>
     <div id="workspace"></div>
     <div class="firstGroups" style="border:0;background-color:#ffffff;">
     <div class="bigbutton" onclick="saveMapping();" id="saveModel" style="float:left" title="Save Model">Save Model</div>
-    <form action='export.php' method='post' target='_blank'>
-      <input type='hidden' value='' name='map' id='map'/>
-      <input type='hidden' value='<?php echo $a; ?>' name='serializeorg' id="serializeorg"/>
-      <input type='hidden' value='<?php echo $filepath; ?>' name='filename' id='filename'/>
+    <input type='hidden' value='' name='map' id='map'/>
+    <input type='hidden' value='<?php echo $a; ?>' name='serializeorg' id="serializeorg"/>
+    <input type='hidden' value='<?php echo $filepath; ?>' name='filename' id='filename'/>
+    <form action='export.php' method='get' target='_blank'>
+      <input type='hidden' value='' name='id' id='id'/>
       <input class="bigbutton" type='submit' value='Export as IATI' id="exportIATI" />
     </form>
     </div>
@@ -94,24 +99,25 @@
     <?php include_once('inc/header.inc'); ?>
      <div id="frontform">
       <div class="firstGroups" style="border:0">
-	Instructions here
+	<p>Welcome to the <i>CSV 2 IATI</i> converter. To create a new IATI file (and mapping file), complete the information below.  By default these fields are populated by data from your <i>User Profile</i>.  Changing this information here will simply change it for the IATI file you are generating.</p>
+	<p>The only required information here are the fields in the first block and a CSV file (last block).
       </div>
       <?php if(isset($_GET['e'])) echo "<div class='error'>".errorCode($_GET['e'])."</div>"; ?>
       <form action="index.php" method="post" enctype="multipart/form-data">
        <div class="firstGroups">
-	<div class="label">Organization Name:</div><div class="entry"><input type="text" name="orgname" value="<?php echo $wbuser->org; ?>" /></div>
-	<div class="label">Organization Reference:</div><div class="entry"><input type="text" name="orgref" value="<?php echo $wbuser->ref; ?>" /></div>
-	<div class="label">Organization Type:</div><div class="entry"><input type="text" name="orgtype" value="<?php echo $wbuser->orgtype; ?>" /></div>
+	<div class="label">Organization Name:</div><div class="entry"><input type="text" name="orgname" value="<?php echo urldecode($wbuser->org); ?>" /></div>
+	<div class="label">Organization Reference:</div><div class="entry"><input type="text" name="orgref" value="<?php echo urldecode($wbuser->ref); ?>" /></div>
+	<div class="label">Organization Type:</div><div class="entry"><input type="text" name="orgtype" value="<?php echo urldecode($wbuser->orgtype); ?>" /></div>
        </div>
        <div class="firstGroups">
-	<div class="label">Currency:</div><div class="entry"><input type="text" name="orgcurrency"/></div>
-	<div class="label">Language:</div><div class="entry"><input type="text" name="orglanguage"/></div>
+	<div class="label">Currency:</div><div class="entry"><select name="orgcurrency"><?php printCurrency($wbuser->currency, $currency); ?></select></div><br/><br/>
+	<div class="label">Language:</div><div class="entry"><select name="orglanguage"><?php printCurrency($wbuser->currency, $language); ?></select></div>
        </div>
        <div class="firstGroups">
-	<div class="label">Contact Person:</div><div class="entry"><input type="text" name="orgcontact" value="<?php echo $wbuser->first . " " . $wbuser->last; ?>" /></div>
-	<div class="label">Contact Telephone:</div><div class="entry"><input type="text" name="orgphone"/></div>
-	<div class="label">Email Address:</div><div class="entry"><input type="text" name="orgemail" value="<?php echo $wbuser->email; ?>" /></div>
-	<div class="label">Address:</div><div class="entry"><input type="text" name="orgaddress"/></div>
+	<div class="label">Contact Person:</div><div class="entry"><input type="text" name="orgcontact" value="<?php echo urldecode($wbuser->first) . " " . urldecode($wbuser->last); ?>" /></div>
+	<div class="label">Contact Telephone:</div><div class="entry"><input type="text" name="orgphone" value="<?php echo urldecode($wbuser->phone); ?>"/></div>
+	<div class="label">Email Address:</div><div class="entry"><input type="text" name="orgemail" value="<?php echo urldecode($wbuser->username); ?>" /></div>
+	<div class="label">Address:</div><div class="entry"><input type="text" name="orgaddress" value="<?php echo urldecode($wbuser->address); ?>"/></div>
        </div>
        <div class="firstGroups">
 	<div class="label">CSV File:</div>
@@ -151,6 +157,15 @@
       return "Please provide an Organization Name.";
     } else {
       return "";
+    }
+  }
+  
+  function printCurrency($c, $a) {
+    foreach($a as $key=>$val) {
+      if($key == urldecode($c))
+	echo "<option value='".$key."' selected>".$val."</option>\n";
+      else
+	echo "<option value='".$key."'>".$val."</option>\n";
     }
   }
  

@@ -59,20 +59,21 @@
  </head>
  <body>
     <?php include_once('inc/header.inc'); ?>
-    <div><?php echo $error; ?></div>
+    <div style="margin-left:-100px;position:absolute;top:23%;color:#ff0000;left:50%;"><?php echo $error; ?></div>
     <div id="login">
 	<form method="POST" action="login.php" name="uxlogin" id="uxlogin">
-		<table style="border:0">
-		<tr><td style="border:0" colspan="2"><div style="font-size:1.6em;margin-bottom:15px;">SIGN IN</div></td></tr>
-		<tr><td style="border:0" style="padding-bottom:15px;">Username:</td><td colspan="2" style="border:0"><input type="text" name="username" class="txtbox" style="margin-left:20px;font-size:0.9em;width:350px;margin-bottom:15px;"></td></tr>
-		<tr><td style="border:0" style="padding-bottom:15px;">Password:</td><td colspan="2" style="border:0"><input type="password" name="password" class="txtbox" style="margin-left:20px;font-size:0.9em;width:350px;margin-bottom:15px;" onkeypress="return runScript(event)"></td></tr>
+		<table class="wrapperLogin">
+		<tr><td colspan="2"><div style="font-size:1.6em;margin-bottom:15px;">SIGN IN</div></td></tr>
+		<tr><td class='lbl'>Username</td><td colspan="2" style="border:0"><input type="text" name="username" class="txtbox"></td></tr>
+		<tr><td class='lbl'>Password</td><td colspan="2" style="border:0"><input type="password" name="password" class="txtbox" onkeypress="return runScript(event)"></td></tr>
 		<tr>
 			<td style="border:0">&nbsp;</td>
-			<td style="border:0">
-				<button onclick="document.getElementById('uxlogin').submit();">Sign In ></button>
+			<td style="border:0;padding-top:10px;">
+				<div class='bigbutton' onclick="document.getElementById('uxlogin').submit();">Sign In</div>
 			</td>
-			<td style="border:0">
-				<div class="signup" onclick="window.location='register.php'">Don't have an account?<br/>Register here</div>
+			<td>
+			
+				<div class="signup" onclick="window.location='registration.php'">Don't have an account?<br/>Register here</div>
 			</td>
 		</tr>
 		</table>

@@ -111,7 +111,7 @@ $(document).ready(function() {
 	  select += "<option value='"+value+"'>"+value+"</option>";
       });
       select += "</select>";
-      select += "<input type='text' id='"+iati_field_key+"_txt' style='display:none'/>";
+      select += "<input type='text' id='"+iati_field_key+"_txt' style='display:none;width:200px'/>";
       return select;
   }
   
@@ -238,7 +238,7 @@ $(document).ready(function() {
     var data = {}
     data.filename = $('#filename').val();
     data.map = map;
-    data.modelname = $('#modelname').val();
+    data.modelname = escape($('#modelname').val());
     data.orgdata = $('#serializeorg').val();
     data.previousname = _previousName;
     
@@ -247,10 +247,12 @@ $(document).ready(function() {
       url: 'savemodel.php',
       data: data,
       success: function(data) {
-	if (data == "TRUE\n") {
+	if (isNumeric(data.replace("\n","")) || data == "TRUE\n") {
 	  $('#saveModel').fadeOut(function() {
 	    $('#exportIATI').fadeIn();
-	    _previousName = $('#modelname').val();
+	    _previousName = escape($('#modelname').val());
+	    if (data != "TRUE\n")
+	      $('#id').val(data.replace("\n",""));
 	  });
 	} else {
 	    alert(data);
@@ -260,4 +262,8 @@ $(document).ready(function() {
     });
   }
   
+  
+  function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+  }
   

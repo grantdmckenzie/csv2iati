@@ -37,6 +37,8 @@
     if ($count > 0) {
       while ($row = pg_fetch_array($result)) {
 	$filename = $row['filename'];
+	echo $filename;
+	$raworg = $row['orgdata'];
 	$org = unserialize($row['orgdata']);
 	echo "<script language='javascript'>\nvar map = ".urldecode($row['map'])."\n</script>";
 	$modelname = $row['modelname'];
@@ -54,7 +56,7 @@
     <?php include_once('inc/header.inc'); ?>
     <div id="frontform">
     <div class="firstGroups">
-      Model Name: <input type="text" id="modelname" value="<?php echo $modelname; ?>"/>
+      Model Name: <input type="text" id="modelname" value="<?php echo urldecode($modelname); ?>"/>
     </div>
     <div class="firstGroups">
     Select an IATI Field from the list below to view CSV mappping options:<br/>
@@ -63,10 +65,11 @@
     <div id="workspace"></div>
     <div class="firstGroups" style="border:0;background-color:#ffffff;">
     <div class="bigbutton" onclick="saveMapping();" id="saveModel" style="float:left" title="Save Model">Save Model</div>
-    <form action='export.php' method='post' target='_blank'>
-      <input type='hidden' value='' name='map' id='map'/>
-      <input type='hidden' value='<?php echo $a; ?>' name='serializeorg'/>
-      <input type='hidden' value='<?php echo $filepath; ?>' name='filename' id='filename'/>
+    <input type='hidden' value='' name='map' id='map'/>
+    <input type='hidden' value='<?php echo $filename; ?>' name='filename' id='filename'/>
+    <input type='hidden' value='<?php echo $raworg; ?>' name='serializeorg' id='serializeorg'/>
+    <form action='export.php' method='get' target='_blank'>
+      <input type='hidden' value='<?php echo $_GET['id']; ?>' name='id' id='id'/>
       <input class="bigbutton" type='submit' value='Export as IATI' id="exportIATI" />
     </form>
     </div>

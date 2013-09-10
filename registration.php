@@ -12,35 +12,38 @@
   <title>CSV to IATI Conversion Tool</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link href="css/main.css" rel="stylesheet" type="text/css">
-   <script type="text/javascript">
-	function runScript(e) {
-	    if (e.keyCode == 13) {
-		document.getElementById('uxreg').submit();
-	    }
-	}
-  </script>
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/registration"></script>
  </head>
  <body>
   <?php include_once('inc/header.inc'); ?>
+    <div id="registerNotification"></div>
     <div id="register">
-	<form method="POST" action="registration.php" name="uxreg" id="uxreg">
-		<table style="border:0">
+		<table class="wrapperLogin" style="top:80px">
 		<tr><td style="border:0" colspan="2"><div style="font-size:1.6em;margin-bottom:15px;">REGISTRATION</div></td></tr>
-		<tr><td style="border:0" style="padding-bottom:15px;">Username:</td><td colspan="2" style="border:0"><input type="text" name="username" class="txtbox" style="margin-left:20px;font-size:0.9em;width:350px;margin-bottom:15px;"></td></tr>
-		<tr><td style="border:0" style="padding-bottom:15px;">First Name:</td><td colspan="2" style="border:0"><input type="text" name="first" class="txtbox" style="margin-left:20px;font-size:0.9em;width:350px;margin-bottom:15px;" onkeypress="return runScript(event)"></td></tr>
-		<tr><td style="border:0" style="padding-bottom:15px;">Last Name:</td><td colspan="2" style="border:0"><input type="text" name="last" class="txtbox" style="margin-left:20px;font-size:0.9em;width:350px;margin-bottom:15px;"></td></tr>
-		<tr><td style="border:0" style="padding-bottom:15px;">Password:</td><td colspan="2" style="border:0"><input type="password" name="password" class="txtbox" style="margin-left:20px;font-size:0.9em;width:350px;margin-bottom:15px;" onkeypress="return runScript(event)"></td></tr>
-		<tr><td style="border:0" style="padding-bottom:15px;">Username:</td><td colspan="2" style="border:0"><input type="text" name="username" class="txtbox" style="margin-left:20px;font-size:0.9em;width:350px;margin-bottom:15px;"></td></tr>
-		<tr><td style="border:0" style="padding-bottom:15px;">Password:</td><td colspan="2" style="border:0"><input type="password" name="password" class="txtbox" style="margin-left:20px;font-size:0.9em;width:350px;margin-bottom:15px;" onkeypress="return runScript(event)"></td></tr>
+		<tr><td></td><td style='color:#ff0000' id="error"></td></tr>
+		<tr><td class='lbl'>First Name*</td><td><input type="text" name="first" value="First"></td></tr>
+		<tr><td class='lbl'>Last Name*</td><td><input type="text" name="last" value="Last"></td></tr>
+		<tr><td class='lbl'>Email*</td><td><input type="text" name="username" value="email@spatialdev.com"></td></tr>
+		<tr><td class='lbl'>Password*</td><td><input type="password" name="password" value=""></td></tr>
+		<tr><td style="padding-top:10px;">&nbsp;</td><td>&nbsp;</td></tr>
+		<tr><td class='lbl'>Organization Name*</td><td><input type="text" name="organization" value="Spatial Development International"></td></tr>
+		<tr><td class='lbl'>Organization Reference*</td><td><input type="text" name="reference" value="http://www.spatialdev.com"></td></tr>
+		<tr><td class='lbl'>Organization Type*</td><td><input type="text" name="orgtype" value="21"></td></tr>
+		<tr><td class='lbl'>Default Currency</td><td><input type="text" name="currency" value="USD"></td></tr>
+		<tr><td class='lbl'>Default Language</td><td><input type="text" name="language" value="English"></td></tr>
+		<tr><td class='lbl'>Telephone Number</td><td><input type="text" name="phone"></td></tr>
+		<tr><td class='lbl'>Mailing Address</td><td><input type="text" name="address"></td></tr>
+		<tr><td></td><td>* Required for Registration</td></tr>
 		<tr>
-			<td style="border:0">&nbsp;</td>
-			<td style="border:0">
-				<button onclick="document.getElementById('uxreg').submit();">Register ></button>
+			<td style="padding-top:10px">&nbsp;</td>
+			<td style="padding-top:10px">
+				<div class="bigbutton" title="Register" onclick="validate();">Register</div>
 			</td>
 			<td style="border:0"></td>
 		</tr>
 		</table>
-	</form>
     </div>
+    
  </body>
 </html>

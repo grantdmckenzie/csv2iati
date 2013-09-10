@@ -12,6 +12,8 @@
   <title>CSV to IATI Conversion Tool</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link href="css/main.css" rel="stylesheet" type="text/css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/models.js"></script>
 <?php
   session_start();
   if (!session_is_registered('wbuser')) {
@@ -36,15 +38,19 @@
 <?php
   require "inc/dbase.inc";
   
-  $sql="SELECT id, modelname, filename FROM models WHERE username='".$wbuser->username."'";
+  $sql="SELECT id, modelname, filename FROM models WHERE userid='".$wbuser->id."'";
   $result=pg_query($sql);
   $count=pg_num_rows($result);
+  
   if ($count > 0 ) {
-    echo "<b>Your saved Models</b><ul>";
+    echo "<b>Your saved Models</b><br/><br/>";
+    $count = 1;
     while ($row = pg_fetch_array($result)) {
-      echo "<li><a style='color:#333333' href='edit.php?id=".$row['id']."'>".$row['modelname']."</a> (<a style='color:#333333' href='".$row['filename']."' target='_blank'>CSV</a>)</li>";	
+      echo "<div style='width:300px;float:left'>".$count . ". <a style='color:#333333' href='edit.php?id=".$row['id']."'>".urldecode($row['modelname'])."</a></div>";
+      echo "<div style='float:left;width:100px;'><a style='color:#333333' href='".$row['filename']."' target='_blank'>CSV</a></div>";
+      echo "<div class='removeModel' title='Delete Model from database' onclick='removeModel(".$row['id'].");'>x</div>";
+      $count++;
     }
-    echo "</ul>";
   }
 ?>
   

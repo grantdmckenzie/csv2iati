@@ -1,6 +1,8 @@
 var _count = 0;
 var _saveNumber = 0;
 var _previousName = "";
+var _required = new Array();
+var REQUIRED = new Array('iati-identifier','title','participating-org');
 $(document).ready(function() {
   
   $.each( iati_template, function( key, value ) {
@@ -141,6 +143,7 @@ $(document).ready(function() {
   function saveMapping() {
     if ($('#modelname').val().length > 0) {
 	_saveNumber ++;;
+	_required = new Array();
 	_mapping = {};
 	var matrix = new Array();
 	var matchval = new Array();
@@ -153,6 +156,8 @@ $(document).ready(function() {
 		var y = x[0]+"\\."+x[1];
 		matchval.push($('#'+y+'_txt').val());
 	      } else {	    
+		var t = domEle.id.split(".");
+		_required.push(t[0]);
 		matchval.push(domEle.value);
 	      }
 	      matrix.push(e);
@@ -224,10 +229,21 @@ $(document).ready(function() {
 	}
 	var ser = escape(JSON.stringify(_mapping, null, 2));
 	$('#map').val(ser);
-	if (ser.length > 6) {
-	  updateDB(ser);
-	} else {
+	var req_match = 0;
+	$.each(REQUIRED, function(key1, val1) {
+	   $.each(_required, function(key2, val2) {
+	       if (val1 == val2) {
+		  req_match++;
+		  return false;
+	       }
+	   });
+	});
+	if (ser.length < 6) {
 	  alert("Please add at least one IATI element before saving the model");
+	} else if (req_match < REQUIRED.length) {
+	  alert("Please add the required IATI Elements");
+	} else {
+	  updateDB(ser);
 	}
     } else {
 	alert("Please provide a name for your new model.");

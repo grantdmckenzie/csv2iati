@@ -29,12 +29,11 @@
   // Error Reporting
   error_reporting(E_ALL);
   ini_set('display_errors', 1);
-
   // Check if this is a postback (look for the u param).
   if (isset($_POST['u']) && $_POST['u'] == 1) {
   
     
-
+    
     // Create an organization object from the post parameters
     require_once('inc/class.inc');
     $org = new org($_POST);
@@ -44,11 +43,16 @@
   <script src="js/iati_template.js"></script>
   <script src="js/json.js"></script>
 <?php
-    if ($_FILES["file"]["error"] > 0) {
-	// echo "Error uploading file: " . $_FILES["file"]["error"] . "<br>";
-	header("location: index.php?e=".$_FILES["file"]["error"]);
+    $allowedExts = array("csv", "txt");
+    $temp = explode(".", $_FILES["file"]["name"]);
+    $extension = end($temp);
+    if (($_FILES["file"]["type"] != "text/csv") || ($_FILES["file"]["size"] > 10000000) || !in_array($extension, $allowedExts)) {
+	  if ($_FILES["file"]["error"] > 0) {
+	      header("location: index.php?e=8");
+	  } else {
+	      header("location: index.php?e=9");
+	  }
     } else {
-      
 	if (strlen($_POST['orgname']) < 2)
 	  header("location: index.php?e=1");
 	  
@@ -96,7 +100,7 @@
     // If the is not a postback, load the following content:
 ?>
   <script src="js/loadiati.js"></script>
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <link rel="stylesheet" href="css/jquery.css" />
   </head>
     <body>
     <?php include_once('inc/header.inc'); ?>
@@ -127,6 +131,7 @@
 	<div class="entry">
 	<input type="file" name="file" id="file"></div>
 	<input type="hidden" name="u" value="1"/>
+	<input type="hidden" name="MAX_FILE_SIZE" value="5900000"/>
        </div>
 	<div id="wrapperNext">
 	<br/>
@@ -158,6 +163,10 @@
       return "Please supply a comma delimited (CSV) file for upload;";
     } else if ($error == 1) {
       return "Please provide an Organization Name.";
+    } else if ($error == 8) {
+      return "There was an error parsing the CSV file.";
+    } else if ($error == 9) {
+      return "The CSV file does not match the require criteria.";
     } else {
       return "";
     }

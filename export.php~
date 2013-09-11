@@ -211,7 +211,8 @@
   function encodeStuff($val) {
     // $val = html_entity_decode($val, ENT_NOQUOTES, 'UTF-8');
     // echo $val . "<br/>";
-    $val = utf8_encode(htmlspecialchars($val));
+    echo mb_detect_encoding($val);
+    // $val = utf8_encode(htmlspecialchars($val));
     return $val;
   }
 ?>

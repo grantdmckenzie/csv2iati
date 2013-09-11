@@ -37,7 +37,6 @@
     if ($count > 0) {
       while ($row = pg_fetch_array($result)) {
 	$filename = $row['filename'];
-	echo $filename;
 	$raworg = $row['orgdata'];
 	$org = unserialize($row['orgdata']);
 	echo "<script language='javascript'>\nvar map = ".urldecode($row['map'])."\n</script>";

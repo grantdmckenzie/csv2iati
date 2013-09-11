@@ -62,7 +62,7 @@
 	mapFields($key, $row);
     }
 
-    Header('Content-type: text/xml; charset=utf-8');
+    Header('Content-type: text/xml; charset: UTF-8');
     $outputXML = str_replace('<?xml version="1.0"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xml->asXML());
     echo $outputXML;
 
@@ -211,8 +211,9 @@
   
   function encodeStuff($val) {
     // $val = html_entity_decode($val, ENT_NOQUOTES, 'UTF-8');
-    // echo $val . "<br/>";
-    $val = utf8_encode(htmlspecialchars($val));
-    return $val;
+    // echo mb_detect_encoding($val) . "<br/>";
+    // $val = utf8_encode(htmlspecialchars($val));
+    $val = utf8_decode(utf8_encode($val));
+	return $val;
   }
 ?>

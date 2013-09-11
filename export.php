@@ -11,17 +11,7 @@
 	    - Serialized PHP Organization object (includes Org name, reference, etc)
 	    - Path to CSV file uploaded to the server (on the previous index.php page)
   */
-<<<<<<< HEAD
 
-=======
-  /* session_start();
-  if (!session_is_registered('wbuser')) {
-    header("location: login.php");
-  } */
-  
-  error_reporting(E_ALL);
-  ini_set('display_errors', 1);
->>>>>>> 568d6d68a76909e2739a02144d95b352b4e733e3
   $titles = null;
   if (isset($_GET['id'])) {
     $id = pg_escape_string($_GET['id']);
@@ -185,31 +175,7 @@
 		return false;
 	}
   }
-<<<<<<< HEAD
 
-=======
-  function check_utf8($str) { 
-    $len = strlen($str); 
-    for($i = 0; $i < $len; $i++){ 
-        $c = ord($str[$i]); 
-        if ($c > 128) { 
-            if (($c > 247)) return false; 
-            elseif ($c > 239) $bytes = 4; 
-            elseif ($c > 223) $bytes = 3; 
-            elseif ($c > 191) $bytes = 2; 
-            else return false; 
-            if (($i + $bytes) > $len) return false; 
-            while ($bytes > 1) { 
-                $i++; 
-                $b = ord($str[$i]); 
-                if ($b < 128 || $b > 191) return false; 
-                $bytes--; 
-            } 
-        } 
-    } 
-    return true; 
-  } // end of check_utf8
->>>>>>> 568d6d68a76909e2739a02144d95b352b4e733e3
   
   function fromDB($id){
     require_once('inc/dbase.inc');
@@ -231,19 +197,9 @@
   
   function encodeStuff($val) {
     // $val = html_entity_decode($val, ENT_NOQUOTES, 'UTF-8');
-<<<<<<< HEAD
 
     // echo $val . "<br/>";
     // echo mb_detect_encoding($val);
     $val = utf8_decode(utf8_encode($val));
     return $val;
   }
-=======
-    // echo mb_detect_encoding($val) . "<br/>";
-    // $val = utf8_encode(htmlspecialchars($val));
-    $val = utf8_decode(utf8_encode($val));
-	return $val;
- 
- }
-?>
->>>>>>> 568d6d68a76909e2739a02144d95b352b4e733e3

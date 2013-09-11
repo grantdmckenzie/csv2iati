@@ -11,14 +11,8 @@
 	    - Serialized PHP Organization object (includes Org name, reference, etc)
 	    - Path to CSV file uploaded to the server (on the previous index.php page)
   */
-  /* session_start();
-  if (!session_is_registered('wbuser')) {
-    header("location: login.php");
-  } */
-  
-  error_reporting(E_ALL);
-  ini_set('display_errors', 1);
-  
+
+  $titles = null;
   if (isset($_GET['id'])) {
     $id = pg_escape_string($_GET['id']);
     require_once('inc/class.inc');
@@ -60,11 +54,12 @@
 	
 	// Add the additional elements based on the CSV and provided mapping file.
 	mapFields($key, $row);
+	
     }
 
-    // Header('Content-type: text/xml; charset=utf-8');
+    Header('Content-type: text/xml; charset: UTF-8');
     $outputXML = str_replace('<?xml version="1.0"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xml->asXML());
-    // echo $outputXML;
+    echo $outputXML;
 
 
    } else {
@@ -73,9 +68,11 @@
    
    // Function to parse the CSV file and store as CSV object
    function parseCSV($file) {
+    global $titles;
     require_once('inc/parsecsv.inc');
     $csv = new parseCSV();
     $csv->auto($file);
+    $titles = $csv->titles;
     return $csv;
   }
   
@@ -108,7 +105,7 @@
 		foreach($propval as $subpropkey=>$subpropval) {
 		  if ($subpropkey != "text" && $subpropval != "None") {
 		    $subelement = checkManualEntryAtt($row,$subpropval,$subelement, $subpropkey);
-		  }
+		   }
 		}
 		
 	      } 
@@ -160,35 +157,25 @@
   // Check that the array properties exist before adding a new property to an element.
   function checkManualEntryAtt($row,$propval,$prop, $propkey) {
     if(strlen($propval) > 0) {
-      if(array_key_exists($propval, $row))
+      if(array_key_exists($propval, $row) && inTitles($propval)) {
 	$prop->addAttribute($propkey, encodeStuff($row[$propval]));
-      else
+      } else if (inTitles($propval)) {
+	$prop->addAttribute($propkey, encodeStuff(""));
+      } else {
 	$prop->addAttribute($propkey, encodeStuff($propval));
-      return $prop;
+      }
+	return $prop;
     }
   }
-  
-  function check_utf8($str) { 
-    $len = strlen($str); 
-    for($i = 0; $i < $len; $i++){ 
-        $c = ord($str[$i]); 
-        if ($c > 128) { 
-            if (($c > 247)) return false; 
-            elseif ($c > 239) $bytes = 4; 
-            elseif ($c > 223) $bytes = 3; 
-            elseif ($c > 191) $bytes = 2; 
-            else return false; 
-            if (($i + $bytes) > $len) return false; 
-            while ($bytes > 1) { 
-                $i++; 
-                $b = ord($str[$i]); 
-                if ($b < 128 || $b > 191) return false; 
-                $bytes--; 
-            } 
-        } 
-    } 
-    return true; 
-  } // end of check_utf8
+  function inTitles($propval) {
+	global $titles;
+	if (in_array($propval, $titles)) {
+		return true;
+	} else {
+		return false;
+	}
+  }
+
   
   function fromDB($id){
     require_once('inc/dbase.inc');
@@ -210,9 +197,9 @@
   
   function encodeStuff($val) {
     // $val = html_entity_decode($val, ENT_NOQUOTES, 'UTF-8');
+
     // echo $val . "<br/>";
-    echo mb_detect_encoding($val);
-    // $val = utf8_encode(htmlspecialchars($val));
+    // echo mb_detect_encoding($val);
+    $val = utf8_decode(utf8_encode($val));
     return $val;
   }
-?>

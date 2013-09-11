@@ -218,6 +218,7 @@
   */
 
   $titles = null;
+  
   if (isset($_GET['id'])) {
     $id = pg_escape_string($_GET['id']);
     require_once('inc/class.inc');
@@ -373,12 +374,12 @@
     }
   }
   function inTitles($propval) {
-	global $titles;
-	if (in_array($propval, $titles)) {
-		return true;
-	} else {
-		return false;
-	}
+    global $titles;
+    if (in_array($propval, $titles)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   
@@ -401,10 +402,6 @@
   }
   
   function encodeStuff($val) {
-    // $val = html_entity_decode($val, ENT_NOQUOTES, 'UTF-8');
-
-    // echo $val . "<br/>";
-    // echo mb_detect_encoding($val);
     $val = utf8_decode(utf8_encode($val));
     return $val;
   }

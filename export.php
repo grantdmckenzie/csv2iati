@@ -18,7 +18,7 @@
   
   error_reporting(E_ALL);
   ini_set('display_errors', 1);
-  
+  $titles = null;
   if (isset($_GET['id'])) {
     $id = pg_escape_string($_GET['id']);
     require_once('inc/class.inc');
@@ -60,6 +60,7 @@
 	
 	// Add the additional elements based on the CSV and provided mapping file.
 	mapFields($key, $row);
+	
     }
 
     Header('Content-type: text/xml; charset: UTF-8');
@@ -73,10 +74,11 @@
    
    // Function to parse the CSV file and store as CSV object
    function parseCSV($file) {
+    global $titles;
     require_once('inc/parsecsv.inc');
     $csv = new parseCSV();
-    
     $csv->auto($file);
+    $titles = $csv->titles;
     return $csv;
   }
   
@@ -109,7 +111,7 @@
 		foreach($propval as $subpropkey=>$subpropval) {
 		  if ($subpropkey != "text" && $subpropval != "None") {
 		    $subelement = checkManualEntryAtt($row,$subpropval,$subelement, $subpropkey);
-		  }
+		   }
 		}
 		
 	      } 
@@ -161,14 +163,24 @@
   // Check that the array properties exist before adding a new property to an element.
   function checkManualEntryAtt($row,$propval,$prop, $propkey) {
     if(strlen($propval) > 0) {
-      if(array_key_exists($propval, $row))
+      if(array_key_exists($propval, $row) && inTitles($propval)) {
 	$prop->addAttribute($propkey, encodeStuff($row[$propval]));
-      else
+      } else if (inTitles($propval)) {
+	$prop->addAttribute($propkey, encodeStuff("1"));
+      } else {
 	$prop->addAttribute($propkey, encodeStuff($propval));
-      return $prop;
+      }
+	return $prop;
     }
   }
-  
+  function inTitles($propval) {
+	global $titles;
+	if (in_array($propval, $titles)) {
+		return true;
+	} else {
+		return false;
+	}
+  }
   function check_utf8($str) { 
     $len = strlen($str); 
     for($i = 0; $i < $len; $i++){ 
@@ -215,5 +227,6 @@
     // $val = utf8_encode(htmlspecialchars($val));
     $val = utf8_decode(utf8_encode($val));
 	return $val;
-  }
+ 
+ }
 ?>

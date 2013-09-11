@@ -166,7 +166,7 @@
       if(array_key_exists($propval, $row) && inTitles($propval)) {
 	$prop->addAttribute($propkey, encodeStuff($row[$propval]));
       } else if (inTitles($propval)) {
-	$prop->addAttribute($propkey, encodeStuff("1"));
+	$prop->addAttribute($propkey, encodeStuff(""));
       } else {
 	$prop->addAttribute($propkey, encodeStuff($propval));
       }

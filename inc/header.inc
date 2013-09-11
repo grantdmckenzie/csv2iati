@@ -6,7 +6,8 @@
 	@description: Header File
   -->
 <div id="header">
-  <h2>CSV to IATI Conversion Tool</h2>
+  <img src="img/iati-standard.png" style="float:left;margin-top:-3px;"/>
+  <h2>CSV2IATI</h2>
   <?php 
     if ($wbuser && is_object($wbuser)) { 
   ?>

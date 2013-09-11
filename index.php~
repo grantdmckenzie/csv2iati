@@ -11,7 +11,9 @@
  <head> 
   <title>CSV to IATI Conversion Tool</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link href='http://fonts.googleapis.com/css?family=Pathway+Gothic+One' rel='stylesheet' type='text/css'>
   <link href="css/main.css" rel="stylesheet" type="text/css">
+  
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery.ui.js"></script>
 <?php
@@ -79,7 +81,7 @@
       Organization Reference: <?php echo $org->orgref; ?>
     </div> -->
     <div class="firstGroups">
-      <div style="font-size:15px">Select an IATI Field from the drop-down menu to view CSV mappping options<br/><br/>
+      <div style="font-size:13px">Select an IATI Field from the drop-down menu to view CSV mappping options<br/><br/>
     <select id="iati_fields"><option value="">Add new IATI field</select></div>
     </div>
     <div id="workspace"></div>
@@ -105,16 +107,16 @@
     <body>
     <?php include_once('inc/header.inc'); ?>
      <div id="frontform">
-      <div class="firstGroups" style="border:0">
-	<p>Welcome to the <i>CSV 2 IATI</i> converter. To create a new IATI file (and mapping file), complete the information below.  By default these fields are populated by data from your <i>User Profile</i>.  Changing this information here will simply change it for the IATI file you are generating.</p>
-	<p>The only required information here are the fields in the first block and a CSV file (last block).
+      <div class="firstGroups" style="border:0;text-align:justify">
+	Welcome to the <i>CSV 2 IATI</i> converter. To create a new IATI file (and mapping file), complete the information below.  By default these fields are populated by data from your <i>User Profile</i>.  Changing this information here will simply change it for the IATI file you are generating.
+	<br/><br/>The only required information here are the fields in the first block and a CSV file (last block).
       </div>
       <?php if(isset($_GET['e'])) echo "<div class='error'>".errorCode($_GET['e'])."</div>"; ?>
       <form action="index.php" method="post" enctype="multipart/form-data">
        <div class="firstGroups">
 	<div class="label">Organization Name:</div><div class="entry"><input type="text" id="orgname" name="orgname" value="<?php echo urldecode($wbuser->org); ?>" /></div>
 	<div class="label">Organization Reference:</div><div class="entry"><input type="text" id="orgref" name="orgref" value="<?php echo urldecode($wbuser->ref); ?>" /></div>
-	<div class="label">Organization Type:</div><div class="entry"><input type="text" style="width:307px" id="orgtypenames"/><input style="width:20px" type="text" id="orgtype" name="orgtype" value="<?php echo urldecode($wbuser->orgtype); ?>" /></div>
+	<div class="label">Organization Type:</div><div class="entry"><input type="text" style="width:306px" id="orgtypenames"/><input style="margin-left:4px;width:18px" type="text" id="orgtype" name="orgtype" value="<?php echo urldecode($wbuser->orgtype); ?>" /></div>
        </div>
        <div class="firstGroups">
 	<div class="label">Currency:</div><div class="entry"><select name="orgcurrency"><?php printCurrency($wbuser->currency, $currency); ?></select></div><br/><br/>
@@ -135,7 +137,7 @@
        </div>
 	<div id="wrapperNext">
 	<br/>
-	<input class="bigbutton" type="submit" name="submit" value="Next Step >"/>
+	<input class="bigbutton" type="submit" name="submit" value="Next"/>
 	</div>
       </form>
      </div><div class="entry">

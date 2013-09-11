@@ -62,9 +62,9 @@
 	mapFields($key, $row);
     }
 
-    Header('Content-type: text/xml; charset=utf-8');
+    // Header('Content-type: text/xml; charset=utf-8');
     $outputXML = str_replace('<?xml version="1.0"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xml->asXML());
-    echo $outputXML;
+    // echo $outputXML;
 
 
    } else {
@@ -75,7 +75,6 @@
    function parseCSV($file) {
     require_once('inc/parsecsv.inc');
     $csv = new parseCSV();
-    
     $csv->auto($file);
     return $csv;
   }

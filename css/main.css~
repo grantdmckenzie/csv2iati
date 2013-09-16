@@ -84,10 +84,19 @@
       margin: 10px;
   }
   h2 {
-      margin-top: -10px;
-      color: #ffffff;
+      margin-top: -5px;
+      color: #eeeeee;
       float: left;
-      font-size: 55px;
+      font-size: 20px;
+      margin-bottom: -5px;
+      letter-spacing: 2px;
+      font-weight: bold;
+      font-family: 'Pathway Gothic One', sans-serif;
+  }
+  .subheader {
+      color:#eeeeee;
+      letter-spacing: 0px;
+      font-family: 'Pathway Gothic One', sans-serif;
   }
   h3 {
       margin: 0 0 5px 0;
@@ -109,7 +118,7 @@
       width: 100%;
       padding: 10px;
       height: 40px;
-      background-color: #646464;
+      background-color: #2f2d2d;
   }
   #menu {
       float: right;

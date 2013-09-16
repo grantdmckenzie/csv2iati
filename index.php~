@@ -48,7 +48,7 @@
     $allowedExts = array("csv", "txt");
     $temp = explode(".", $_FILES["file"]["name"]);
     $extension = end($temp);
-    if (($_FILES["file"]["type"] != "text/csv") || ($_FILES["file"]["size"] > 10000000) || !in_array($extension, $allowedExts)) {
+    if (($_FILES["file"]["type"] != "text/csv") || ($_FILES["file"]["size"] > 15000000) || !in_array($extension, $allowedExts)) {
 	  if ($_FILES["file"]["error"] > 0) {
 	      header("location: index.php?e=8");
 	  } else {

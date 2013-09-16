@@ -6,8 +6,9 @@
 	@description: Header File
   -->
 <div id="header">
-  <img src="img/iati-standard.png" style="float:left;margin-top:-3px;"/>
-  <h2>CSV2IATI</h2>
+  <!-- <img src="img/iati-standard.png" style="float:left;margin-top:-3px;"/> -->
+  <table style="float:left"><tr><td><h2>CSV 2 IATI</h2></td></tr>
+  <tr><td class='subheader'>Converter Toolbox</td></tr></table>
   <?php 
     if ($wbuser && is_object($wbuser)) { 
   ?>

@@ -48,16 +48,18 @@
     $allowedExts = array("csv", "txt");
     $temp = explode(".", $_FILES["file"]["name"]);
     $extension = end($temp);
-    if (($_FILES["file"]["type"] != "text/csv") || ($_FILES["file"]["size"] > 15000000) || !in_array($extension, $allowedExts)) {
-	  if ($_FILES["file"]["error"] > 0) {
-	      header("location: index.php?e=8");
-	  } else {
-	      header("location: index.php?e=9");
-	  }
-    } else {
-	if (strlen($_POST['orgname']) < 2)
+    
+    if ($_FILES["file"]["type"] != "text/csv") {
+	  header("location: index.php?e=10");
+    } else if ($_FILES["file"]["size"] > 15000000) {
+	  header("location: index.php?e=11");
+    } else if (!in_array($extension, $allowedExts)) {
+	  header("location: index.php?e=12");
+    } else if ($_FILES["file"]["error"] > 0) {
+	  header("location: index.php?e=8");
+    } else if (strlen($_POST['orgname']) < 2) {
 	  header("location: index.php?e=1");
-	  
+    } else {
 	// Parse the CSV to get column headers (to load select)
 	parseCSV($_FILES["file"]["tmp_name"]);
 	// Move CSV to known directory for access later.  CSV labeled by date and a random integer.
@@ -167,13 +169,19 @@
       return "Please provide an Organization Name.";
     } else if ($error == 8) {
       return "There was an error parsing the CSV file.";
-    } else if ($error == 9) {
-      return "The CSV file does not match the required criteria (CSV and < 15M)";
+    } else if ($error == 10) {
+      return "The CSV file does not match the required criteria (File Type Text/CSV)";
+    } else if ($error == 11) {
+      return "The CSV file does not match the required criteria (File Size < 15M)";
+    } else if ($error == 12) {
+      return "The CSV file does not match the required criteria (File Extension .csv or .txt)";
     } else {
       return "";
     }
   }
-  
+  function checkFileError($_FILES) {
+      
+  }
   function printCurrency($c, $a) {
     foreach($a as $key=>$val) {
       if($key == urldecode($c))

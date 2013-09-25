@@ -49,9 +49,10 @@
     $temp = explode(".", $_FILES["file"]["name"]);
     $extension = end($temp);
     
-    if ($_FILES["file"]["type"] != "text/csv") {
-	  header("location: index.php?e=10");
-    } else if ($_FILES["file"]["size"] > 15000000) {
+    // if ($_FILES["file"]["type"] != "text/csv") {
+	//   header("location: index.php?e=10");
+    // } else 
+    if ($_FILES["file"]["size"] > 15000000) {
 	  header("location: index.php?e=11");
     } else if (!in_array($extension, $allowedExts)) {
 	  header("location: index.php?e=12");

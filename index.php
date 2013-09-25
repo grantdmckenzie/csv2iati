@@ -133,7 +133,7 @@
 	<div class="entry">
 	<input type="file" name="file" id="file"></div>
 	<input type="hidden" name="u" value="1"/>
-	<input type="hidden" name="MAX_FILE_SIZE" value="5900000"/>
+	<input type="hidden" name="MAX_FILE_SIZE" value="15000000"/>
        </div>
 	<div id="wrapperNext">
 	<br/>
@@ -168,7 +168,7 @@
     } else if ($error == 8) {
       return "There was an error parsing the CSV file.";
     } else if ($error == 9) {
-      return "The CSV file does not match the require criteria.";
+      return "The CSV file does not match the required criteria (CSV and < 15M)";
     } else {
       return "";
     }

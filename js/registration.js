@@ -26,7 +26,7 @@ function validate() {
 	    e = '[name=password]';
 	  else if ($('[name=organization]').val().length < 5)
 	    e = '[name=organization]';  
-	  else if ($('[name=reference]').val().length < 5)
+	  else if ($('[name=reference]').val().length < 1)
 	    e = '[name=reference]';  
 	  else if ($('[name=orgtype]').val().length < 1)
 	    e = '[name=orgtype]'; 
